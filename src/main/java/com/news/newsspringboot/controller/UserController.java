@@ -35,9 +35,9 @@ public class UserController {
     /**
      * 获取创建表单页面
      */
-    @PostMapping()
+    @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    User create(@Validated @RequestBody User user) {
+    User create(@Validated User user) {
         return userService.createUser(user);
     }
 
