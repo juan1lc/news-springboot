@@ -30,39 +30,39 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User editUserName(String userId, String columnValue) {
+    public int editUserName(String userId, String columnValue) {
 
         User preuser = repository.getById(userId);
         preuser.setUsername(columnValue);
         repository.save(preuser);
-        return repository.getById(userId);
+        return 0;
 
     }
 
     @Override
-    public User editPassword(String userId, String columnValue) {
+    public int editPassword(String userId, String columnValue) {
         User preuser = repository.getById(userId);
         preuser.setPassword(columnValue);
         repository.save(preuser);
-        return repository.getById(userId);
+        return 0;
     }
 
     @Override
-    public User editPhone(String userId, String columnValue) {
+    public int editPhone(String userId, String columnValue) {
 
         User preuser = repository.getById(userId);
         preuser.setPhone(columnValue);
         repository.save(preuser);
-        return repository.getById(userId);
+        return 0;
     }
 
     @Override
-    public User editMail(String userId, String columnValue) {
+    public int editMail(String userId, String columnValue) {
 
         User preuser = repository.getById(userId);
         preuser.setMail(columnValue);
         repository.save(preuser);
-        return repository.getById(userId);
+        return 0;
     }
 
     @Override
@@ -74,11 +74,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User editUserIntro(String userId, String columnValue) {
+    public int editUserIntro(String userId, String columnValue) {
         User preuser = repository.getById(userId);
         preuser.setIntroduction(columnValue);
         repository.save(preuser);
-        return repository.getById(userId);
+        return 0;
     }
 
     @Override
