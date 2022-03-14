@@ -1,5 +1,6 @@
 package com.news.newsspringboot.service;
 
+import com.news.newsspringboot.dto.TokenCreateRequest;
 import com.news.newsspringboot.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,9 +29,14 @@ public interface UserService extends UserDetailsService {
     //身份验证
     User getUserByUsername(String userName);
     User findUser(String userId,String password);
+    User findUserByUsername(String userName, String password);
     //查询所有用户信息
     Page<User> search(Pageable pageable);
 
     @Override
     User loadUserByUsername(String username) throws UsernameNotFoundException;
+
+    String createToken(TokenCreateRequest tokenCreateRequest);
+
+    User getCurrentUser();
 }

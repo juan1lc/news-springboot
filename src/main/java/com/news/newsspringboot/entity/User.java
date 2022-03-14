@@ -1,5 +1,6 @@
 package com.news.newsspringboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.news.newsspringboot.utils.enums.Gender;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -16,6 +17,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class User implements UserDetails {
 
     @Id

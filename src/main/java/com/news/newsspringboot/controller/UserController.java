@@ -80,14 +80,20 @@ public class UserController {
 
 
     @GetMapping(value="/login",produces = "application/json;charset=utf-8")
-    public User findUser(@RequestParam(value="id") String id,@RequestParam(value="password") String password){
-        if(userService.findUser(id,password)!=null) {
-            return userService.findUser(id,password);
+    public User findUser(@RequestParam(value="username") String username,@RequestParam(value="password") String password){
+        if(userService.findUserByUsername(username,password)!=null) {
+            return userService.findUserByUsername(username,password);
         }
         else {
             User user=new User();
             return user;
         }
+    }
+
+    //根据tokens信息得到个人信息
+    @GetMapping("/me")
+    User me() {
+        return userService.getCurrentUser();
     }
 
     @Autowired

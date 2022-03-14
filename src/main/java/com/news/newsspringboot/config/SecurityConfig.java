@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final long EXPIRATION_TIME = 864000000; // 10 days
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
-    //public static final String CREATE_TOKEN_URL = "/tokens";
+    public static final String CREATE_TOKEN_URL = "/tokens";
     public static final String SIGN_UP_URL = "/users/";
 
     UserService userService;
@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //增加JWT鉴权的filter并将sessionManagement更改为无状态
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+                .antMatchers(HttpMethod.POST, SIGN_UP_URL, CREATE_TOKEN_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))

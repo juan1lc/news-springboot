@@ -1,5 +1,9 @@
 package com.news.newsspringboot.service.impl;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.news.newsspringboot.config.SecurityConfig;
+import com.news.newsspringboot.dto.TokenCreateRequest;
 import com.news.newsspringboot.entity.User;
 import com.news.newsspringboot.exception.BizException;
 import com.news.newsspringboot.exception.ExceptionType;
@@ -13,10 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseService implements UserService {
     @Autowired
     UserRepository repository;
     @Autowired
@@ -114,6 +119,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByUsername(String userName, String password) {
+        User user = getUserByUsername(userName);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BizException(ExceptionType.USER_PASSWORD_NOT_MATCH);
+        }
+        return user;
+    }
+
+    @Override
     public Page<User> search(Pageable pageable) {
 
         return repository.findAll(pageable);
@@ -126,5 +140,24 @@ public class UserServiceImpl implements UserService {
             throw new BizException(ExceptionType.USER_NOT_FOUND);
         }
         return user.get();  //optional方法需要get后得到实体
+    }
+
+    @Override
+    public String createToken(TokenCreateRequest tokenCreateRequest) {
+        User user = loadUserByUsername(tokenCreateRequest.getUsername());
+        if (!passwordEncoder.matches(tokenCreateRequest.getPassword(), user.getPassword())) {
+            throw new BizException(ExceptionType.USER_PASSWORD_NOT_MATCH);
+        }
+
+        return JWT.create()
+                .withSubject(user.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConfig.EXPIRATION_TIME))
+                .sign(Algorithm.HMAC512(SecurityConfig.SECRET.getBytes()));
+    }
+
+
+    @Override
+    public User getCurrentUser() {
+        return super.getCurrentUserEntity();
     }
 }
