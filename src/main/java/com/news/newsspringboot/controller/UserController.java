@@ -2,6 +2,7 @@ package com.news.newsspringboot.controller;
 
 import com.news.newsspringboot.entity.User;
 import com.news.newsspringboot.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 @CrossOrigin
-//@Api(tags = "用户")
+@Api(tags = "用户")
 public class UserController {
 
     UserService userService;
@@ -33,6 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     User get(@PathVariable String id) {
         return userService.getUserById(id);
     }

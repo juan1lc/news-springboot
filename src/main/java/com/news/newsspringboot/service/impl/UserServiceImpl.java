@@ -1,27 +1,41 @@
 package com.news.newsspringboot.service.impl;
 
 import com.news.newsspringboot.entity.User;
+import com.news.newsspringboot.exception.BizException;
+import com.news.newsspringboot.exception.ExceptionType;
 import com.news.newsspringboot.repository.UserRepository;
 import com.news.newsspringboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository repository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
-    @Transactional
     public User createUser(User user) {
-
+        checkUserName(user.getUsername());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }
 
-    @Transactional
+    private void checkUserName(String userName){
+        Optional<User> user = repository.findByUsername(userName);
+        if(user.isPresent()){
+            throw new BizException(ExceptionType.USER_NAME_DUPLICATE);
+        }
+    }
+
     @Override
     public void deleteUser(String userId) {
 
@@ -103,5 +117,14 @@ public class UserServiceImpl implements UserService {
     public Page<User> search(Pageable pageable) {
 
         return repository.findAll(pageable);
+    }
+
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user = repository.findByUsername(username);
+        if(!user.isPresent()){
+            throw new BizException(ExceptionType.USER_NOT_FOUND);
+        }
+        return user.get();  //optional方法需要get后得到实体
     }
 }

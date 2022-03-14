@@ -8,5 +8,5 @@ public class ErrorResponse {
 
     private String message;
 
-    private Object trace;
+    private Object trace; //路径信息
 }

@@ -1,4 +1,4 @@
-package com.news.newsspringboot.exception.handler;
+package com.news.newsspringboot.handler;
 
 import com.news.newsspringboot.exception.BizException;
 import com.news.newsspringboot.exception.ErrorResponse;

@@ -3,8 +3,11 @@ package com.news.newsspringboot.service;
 import com.news.newsspringboot.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
     /**
      * 新增用户
      * @param user
@@ -28,4 +31,6 @@ public interface UserService {
     //查询所有用户信息
     Page<User> search(Pageable pageable);
 
+    @Override
+    User loadUserByUsername(String username) throws UsernameNotFoundException;
 }
