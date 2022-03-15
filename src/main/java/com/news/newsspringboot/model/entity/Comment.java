@@ -1,22 +1,24 @@
-package com.news.newsspringboot.entity;
+package com.news.newsspringboot.model.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
-public class Role{
+public class Comment {
     @Id
     @GeneratedValue(generator = "ksuid")
     @GenericGenerator(name = "ksuid", strategy = "com.news.newsspringboot.utils.KsuidIdentifierGenerator")
-    //@Column(name = "id", nullable = false)
     private String id;
 
-    private String name;
+    private Date publish_time;
 
-    private String title;
+    private String content;
 
-
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="publisher_id",referencedColumnName = "id")
+    private User user;
 }

@@ -1,4 +1,4 @@
-package com.news.newsspringboot.utils.enums;
+package com.news.newsspringboot.enums;
 
 public enum Gender {
     FEMALE,

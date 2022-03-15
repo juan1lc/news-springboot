@@ -1,4 +1,4 @@
-package com.news.newsspringboot.dto;
+package com.news.newsspringboot.model.dto;
 
 import lombok.Data;
 

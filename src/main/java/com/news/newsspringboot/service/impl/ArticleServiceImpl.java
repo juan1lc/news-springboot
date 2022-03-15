@@ -1,6 +1,6 @@
 package com.news.newsspringboot.service.impl;
 
-import com.news.newsspringboot.entity.Article;
+import com.news.newsspringboot.model.entity.Article;
 import com.news.newsspringboot.repository.ArticleRepository;
 import com.news.newsspringboot.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;

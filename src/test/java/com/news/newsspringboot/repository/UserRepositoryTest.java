@@ -1,8 +1,7 @@
 package com.news.newsspringboot.repository;
 
-import com.news.newsspringboot.entity.User;
-import com.news.newsspringboot.repository.UserRepository;
-import com.news.newsspringboot.utils.enums.Gender;
+import com.news.newsspringboot.model.entity.User;
+import com.news.newsspringboot.enums.Gender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

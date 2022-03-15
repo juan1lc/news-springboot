@@ -1,4 +1,4 @@
-package com.news.newsspringboot.entity;
+package com.news.newsspringboot.model.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
