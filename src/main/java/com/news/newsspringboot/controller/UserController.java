@@ -1,5 +1,6 @@
 package com.news.newsspringboot.controller;
 
+import com.news.newsspringboot.enums.Gender;
 import com.news.newsspringboot.model.entity.User;
 import com.news.newsspringboot.model.vo.Response;
 import com.news.newsspringboot.service.UserService;
@@ -11,11 +12,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -34,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping
-    User create(@Validated @RequestBody User user) {
+    User create(@Validated User user) {
         return userService.createUser(user);
     }
 
@@ -52,9 +56,9 @@ public class UserController {
 
 
     @GetMapping("info/{id}")
-    Response getUserInfoById(@PathVariable("id") String userId){
-        log.info("#### 获取指定用户的信息，入参：userId={}",userId);
-        User user = userService.getUserById(userId);
+    Response getUserInfoById(@PathVariable("id") String id){
+        log.info("#### 获取指定用户的信息，入参：userId={}",id);
+        User user = userService.getUserById(id);
         log.info("#### 获取指定用户的信息，结果：user={}",user);
         if(Objects.isNull(user)){
             return Response.responseFail("用户ID无效",null);
@@ -62,15 +66,43 @@ public class UserController {
         return Response.responseSuccess("获取成功",user);
     }
 
-    /**
-     * 修改用户密码
-     * @param userName    用户名
-     * @param password  原密码
-     * @param newPassword   新密码
-     * @return 返回业务响应对象（包含数据）
-     */
-    @PutMapping("safe/password/modify")
-    Response modifyUserPassword(@RequestParam("userName") String userName, @RequestParam("password") String password, @RequestParam("newPassword") String newPassword){
+    @PutMapping("info/{id}/edit")
+    Response editUserInfo(@PathVariable(value="id") String id,
+                          @RequestParam(value="columnName") String columnName,
+                          @RequestParam(value="columnValue") String columnValue){
+        log.info("#### 用户接口API，入参：id={}，columnName={}，columnValue={}"
+                ,id,columnName,columnValue);
+        // 更新的用户信息
+        boolean b = false;
+        if (columnName.equals("userName")) {
+            userService.editUserName(id, columnValue);
+            b=true;
+        }
+        if (columnName.equals("phone")) {
+            userService.editPhone(id, columnValue);
+            b=true;
+        }
+        if (columnName.equals("mail")) {
+            userService.editMail(id, columnValue);
+            b=true;
+        }
+        if(columnName.equals("introduction")){
+            userService.editUserIntro(id, columnValue);
+            b=true;
+        }
+        if(!b){
+            return Response.responseFail("修改信息失败！",null);
+        }
+        // 查询用户信息，刷新数据
+        final User updateUser = userService.getUserById(id);
+        log.info("#### 用户接口API，修改用户信息，结果：updateUser={}",updateUser);
+        return Response.responseSuccess("修改信息成功！",Objects.isNull(updateUser) ? null: updateUser);
+    }
+
+
+    @PutMapping("/safe/password/modify")
+    Response modifyUserPassword(@RequestParam("userName") String userName,@RequestParam("password") String password,
+                                @RequestParam("newPassword") String newPassword){
         log.info("#### 用户密码修改API，入参：userName={}，password={}，newPassword={}",userName,password,newPassword);
         boolean  b = userService.modifyUserPassword(userName, password, newPassword);
         if(!b){
@@ -94,6 +126,17 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "info/{id}/editphoto",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    Response changeUserAvatar(@PathVariable("id") String id, MultipartFile file){
+        log.info("#### 用户头像修改，入参：userId={}，file={}",id,file);
+        final String photo = userService.changePhoto(id, file);
+        if(Objects.isNull(photo)){
+            log.info("#### 用户头像修改，用户头像上传失败！");
+            return Response.responseFail("头像上传失败！",null);
+        }
+        log.info("#### 用户头像修改，用户头像上传成功！");
+        return Response.responseSuccess("头像上传成功！",photo);
+    }
 
     @Autowired
     public void setUserService(UserService userService){

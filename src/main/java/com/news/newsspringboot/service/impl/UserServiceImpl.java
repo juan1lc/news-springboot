@@ -104,14 +104,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int editUserPhoto(String userId, String columnValue) {
-        User preuser = repository.getById(userId);
-        preuser.setPhoto(columnValue);
-        repository.save(preuser);
-        return 0;
-    }
-
-    @Override
     public int editUserIntro(String userId, String columnValue) {
         User preuser = repository.getById(userId);
         preuser.setIntroduction(columnValue);
@@ -133,6 +125,7 @@ public class UserServiceImpl implements UserService {
         if(findUserByUsername(userName,password)!=null) {
             User user = findUserByUsername(userName,password);
             user.setPassword(passwordEncoder.encode(newPassword));
+            repository.save(user);
             return true;
         }
         return false;
@@ -147,7 +140,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUsername(String userName) {
 
-        return repository.getByUsername(userName);
+        return repository.getUserByUsername(userName);
     }
 
     @Override

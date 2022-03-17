@@ -22,7 +22,7 @@ public class UserRepositoryTest {
 
         User saveduser = repository.save(user);
 
-        User result = repository.getByUsername("刘宇");
+        User result = repository.getUserByUsername("刘宇");
         System.out.println(result.toString());
     }
 }

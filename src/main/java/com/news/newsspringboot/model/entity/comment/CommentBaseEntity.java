@@ -1,4 +1,4 @@
-package com.news.newsspringboot.model.entity;
+package com.news.newsspringboot.model.entity.comment;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -6,19 +6,24 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
+@MappedSuperclass
 @Data
-public class Comment {
+public class CommentBaseEntity {
     @Id
     @GeneratedValue(generator = "ksuid")
     @GenericGenerator(name = "ksuid", strategy = "com.news.newsspringboot.utils.KsuidIdentifierGenerator")
     private String id;
 
-    private Date publish_time;
+    private Date createtime;
 
     private String content;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="publisher_id",referencedColumnName = "id")
-    private User user;
+    private String userid;
+
+    private String commentparent;
+
+    private Integer commentlike;
+
+    private String commentlikeuser;
+
 }

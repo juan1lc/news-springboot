@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, String> {
@@ -15,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, String> {
      * @param username
      * @return
      */
-    User getByUsername(String username);
+    User getUserByUsername(String username);
 
     /**
      * 根据用户Id和密码返回用户
@@ -41,14 +42,12 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findUserByUsernameAndPassword(String username, String password);
 
     /**
-     * 更换用户头像
-     * @param id 用户ID
-     * @param photo 头像的URL
-     * @return 返回受影响的记录数
+     * 根据用户名模糊查询用户
+     * @param username
+     * @return
      */
-    @Modifying
-    @Query("update User user set user.photo=#{photo} where user.id=#{id}")
-    void changePhoto(@Param("id") Integer id, @Param("photo") String photo);
+    @Query("select u from User u where u.username like %?1%")
+    List<User> findByUsernameLike(String username);
 
 
 }

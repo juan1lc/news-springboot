@@ -28,7 +28,6 @@ public interface UserService {
     int editPassword(String userId, String columnValue);
     int editPhone(String userId, String columnValue);
     int editMail(String userId, String columnValue);
-    int editUserPhoto(String userId,String columnValue);
     int editUserIntro(String userId, String columnValue);
     //查询用户信息
     User getUserById(String userId);

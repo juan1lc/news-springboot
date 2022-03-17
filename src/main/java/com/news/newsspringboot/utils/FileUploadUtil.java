@@ -21,7 +21,7 @@ public class FileUploadUtil {
     /**
      * 文件保存的父路径
      */
-    private static final String FILE_PATH = "src/main/resources/static/images/";
+    private static final String FILE_PATH = "E://develop/flutter_demo/news-springboot/src/main/resources/static";
     /**
      *  文件存入DB后URL访问时的后缀地址链接(例如：images/post/43a97094-b478-4149-9bff-772085d568a0.jpg)
      */
