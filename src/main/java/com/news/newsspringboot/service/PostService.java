@@ -3,9 +3,13 @@ package com.news.newsspringboot.service;
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
 import com.news.newsspringboot.model.entity.Post;
+import com.news.newsspringboot.model.entity.comment.PostComment;
+import com.news.newsspringboot.model.vo.PostDetailsVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface PostService{
 
@@ -26,4 +30,10 @@ public interface PostService{
 
     //修改草稿
     Post updatePost(String postId, PostUpdateRequestDto postUpdateRequestDto);
+
+    //获取某动态所有评论
+    List<PostComment> getAllComments(String postId);
+
+    //获取动态详情页
+    PostDetailsVo getPostDetails(String postId);
 }

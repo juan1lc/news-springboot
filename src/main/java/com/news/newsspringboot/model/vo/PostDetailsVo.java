@@ -1,6 +1,7 @@
 package com.news.newsspringboot.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.news.newsspringboot.model.entity.comment.PostComment;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -33,30 +34,7 @@ public class PostDetailsVo {
     @JsonFormat
     private LocalDateTime createTime;
 
-   List<CommentReply> commentReplyList;
-
-   @Data
-   private static class CommentReply{
-        private Integer commentId;
-        private String commentContent;
-        private Integer commentLike;
-        private String commentLikeUsers;
-       @JsonFormat
-        private LocalDateTime commentCreateTime;
-        private Integer commentAuthorId;
-        private String commentAuthorAvatar;
-        private String commentAuthorName;
-        private String commentAuthorPhone;
-        private Integer parentCommentId;
-        private String parentCommentContent;
-        private Integer parentCommentLike;
-       @JsonFormat
-        private LocalDateTime parentCommentCreateTime;
-        private Integer parentCommentAuthorId;
-        private String parentCommentAuthorAvatar;
-        private String parentCommentAuthorName;
-        private String parentCommentAuthorPhone;
-    }
+    private  List<PostCommentVo> PostCommentList;
 
 
 }

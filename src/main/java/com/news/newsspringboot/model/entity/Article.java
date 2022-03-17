@@ -1,5 +1,6 @@
 package com.news.newsspringboot.model.entity;
 
+import com.news.newsspringboot.model.entity.comment.ArticleComment;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -33,6 +34,6 @@ public class Article {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "article_comment", joinColumns = @JoinColumn(name="article_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name="comment_id", referencedColumnName = "id"))
-    private Set<Comment> article_comment;
+    private Set<ArticleComment> article_comment;
 
 }

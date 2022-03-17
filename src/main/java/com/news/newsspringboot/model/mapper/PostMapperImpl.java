@@ -4,19 +4,28 @@ import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
 import com.news.newsspringboot.model.entity.Post;
 import com.news.newsspringboot.model.entity.User;
+import com.news.newsspringboot.model.entity.comment.PostComment;
+import com.news.newsspringboot.model.vo.PostCommentVo;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
 import com.news.newsspringboot.model.vo.PostVo;
+import com.news.newsspringboot.repository.PostCommentRepository;
 import com.news.newsspringboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.AbstractList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class PostMapperImpl implements PostMapper{
     UserService userService;
+
+    PostCommentRepository postCommentRepository;
+
+    PostCommentMapper postCommentMapper;
 
     @Override
     public Post createEntity(PostCreateRequestDto postCreateRequestDto) {
@@ -99,6 +108,9 @@ public class PostMapperImpl implements PostMapper{
 
         String userId = post.getUserid();
         User user = userService.getUserById(userId);
+        String postId = post.getId();
+        List<PostCommentVo> postCommentList = postCommentRepository.findByPostid(postId).stream().map(postCommentMapper::toVo).toList();
+
 
         PostDetailsVo postDetailsVo = new PostDetailsVo();
         postDetailsVo.setAuthor(user.getUsername());
@@ -113,6 +125,7 @@ public class PostMapperImpl implements PostMapper{
         if ( post.getCreateTime() != null ) {
             postDetailsVo.setCreateTime( LocalDateTime.ofInstant( post.getCreateTime().toInstant(), ZoneId.of( "UTC" ) ) );
         }
+        postDetailsVo.setPostCommentList(postCommentList);
 
         return postDetailsVo;
     }
@@ -120,5 +133,15 @@ public class PostMapperImpl implements PostMapper{
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setPostCommentRepository(PostCommentRepository postCommentRepository) {
+        this.postCommentRepository = postCommentRepository;
+    }
+
+    @Autowired
+    public void setPostCommentMapper(PostCommentMapper postCommentMapper) {
+        this.postCommentMapper = postCommentMapper;
     }
 }

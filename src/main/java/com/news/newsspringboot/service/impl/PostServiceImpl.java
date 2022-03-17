@@ -6,7 +6,10 @@ import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
 import com.news.newsspringboot.model.entity.Post;
 import com.news.newsspringboot.model.entity.User;
+import com.news.newsspringboot.model.entity.comment.PostComment;
 import com.news.newsspringboot.model.mapper.PostMapper;
+import com.news.newsspringboot.model.vo.PostDetailsVo;
+import com.news.newsspringboot.repository.PostCommentRepository;
 import com.news.newsspringboot.repository.PostRepository;
 import com.news.newsspringboot.service.PostService;
 import com.news.newsspringboot.service.UserService;
@@ -26,11 +29,11 @@ import java.util.Optional;
 @Service
 public class PostServiceImpl implements PostService {
 
-    @Autowired
     PostRepository repository;
 
-    @Autowired
     PostMapper postMapper;
+
+    PostCommentRepository postCommentRepository;
 
     @Override
     public Post createPost(PostCreateRequestDto postCreateRequestDto, MultipartFile[] files) {
@@ -84,6 +87,17 @@ public class PostServiceImpl implements PostService {
         return postMapper.updateEntity(post, postUpdateRequestDto);
     }
 
+    @Override
+    public List<PostComment> getAllComments(String postId) {
+        return postCommentRepository.findByPostid(postId);
+    }
+
+    @Override
+    public PostDetailsVo getPostDetails(String postId) {
+        Post post = repository.getById(postId);
+        return postMapper.toDetailsVo(post);
+    }
+
     private void checkPostStatics(Integer postStatus){
         log.info("#### 动态服务层，检查动态状态：postStatus={}",postStatus);
         if(postStatus != 1){
@@ -93,5 +107,20 @@ public class PostServiceImpl implements PostService {
 
     private Post getById(String id){
         return repository.getById(id);
+    }
+
+    @Autowired
+    public void setRepository(PostRepository repository) {
+        this.repository = repository;
+    }
+
+    @Autowired
+    public void setPostMapper(PostMapper postMapper) {
+        this.postMapper = postMapper;
+    }
+
+    @Autowired
+    public void setPostCommentRepository(PostCommentRepository postCommentRepository) {
+        this.postCommentRepository = postCommentRepository;
     }
 }

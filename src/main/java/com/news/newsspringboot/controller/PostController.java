@@ -1,11 +1,14 @@
 package com.news.newsspringboot.controller;
 
+import com.news.newsspringboot.model.dto.PostCommentCreateDto;
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
+import com.news.newsspringboot.model.entity.comment.PostComment;
 import com.news.newsspringboot.model.mapper.PostMapper;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
 import com.news.newsspringboot.model.vo.PostVo;
 import com.news.newsspringboot.model.vo.Response;
+import com.news.newsspringboot.service.CommentService;
 import com.news.newsspringboot.service.PostService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ public class PostController {
 
     PostService postService;
     PostMapper postMapper;
+    CommentService commentService;
 
     @PostMapping(value = "/publish-post", consumes = "multipart/form-data")
     PostVo create(@Validated PostCreateRequestDto postCreateRequestDto, MultipartFile[] files){
@@ -44,8 +48,8 @@ public class PostController {
     }
 
     @GetMapping("/{id}/details")
-    PostDetailsVo postDetail(@PathVariable String postId){
-        return null;
+    PostDetailsVo postDetail(@PathVariable("id") String postId){
+        return postService.getPostDetails(postId);
     }
 
     @DeleteMapping("/{id}")
@@ -69,4 +73,7 @@ public class PostController {
     public void setPostMapper(PostMapper postMapper) {
         this.postMapper = postMapper;
     }
+
+    @Autowired
+    public void setCommentService(CommentService commentService) {this.commentService = commentService;}
 }
