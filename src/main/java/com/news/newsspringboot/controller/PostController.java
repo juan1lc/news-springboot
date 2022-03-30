@@ -3,6 +3,7 @@ package com.news.newsspringboot.controller;
 import com.news.newsspringboot.model.dto.PostCommentCreateDto;
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
+import com.news.newsspringboot.model.entity.Post;
 import com.news.newsspringboot.model.entity.comment.PostComment;
 import com.news.newsspringboot.model.mapper.PostMapper;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
@@ -20,6 +21,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -61,6 +64,11 @@ public class PostController {
     @PutMapping("/{id}/edit")
     PostVo update(@PathVariable(value = "id") String id, PostUpdateRequestDto postUpdateRequestDto){
         return postMapper.toVo(postService.updatePost(id, postUpdateRequestDto));
+    }
+
+    @GetMapping(value = "/user-posts/{id}", produces = "application/json;charset=utf-8")
+    List<Post> getUserPosts(@PathVariable(value = "id") String userid){
+        return postService.getUserPosts(userid);
     }
 
 

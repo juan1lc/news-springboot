@@ -66,8 +66,8 @@ public class UserController {
         return Response.responseSuccess("获取成功",user);
     }
 
-    @PutMapping("info/{id}/edit")
-    Response editUserInfo(@PathVariable(value="id") String id,
+    @PutMapping("info/edit")
+    Response editUserInfo(@RequestParam(value="id") String id,
                           @RequestParam(value="columnName") String columnName,
                           @RequestParam(value="columnValue") String columnValue){
         log.info("#### 用户接口API，入参：id={}，columnName={}，columnValue={}"
@@ -88,6 +88,18 @@ public class UserController {
         }
         if(columnName.equals("introduction")){
             userService.editUserIntro(id, columnValue);
+            b=true;
+        }
+        if(columnName.equals("gender")){
+            userService.editUserGender(id, columnValue);
+            b=true;
+        }
+        if(columnName.equals("birth")){
+            userService.editBirth(id, columnValue);
+            b=true;
+        }
+        if(columnName.equals("address")){
+            userService.editAdress(id, columnValue);
             b=true;
         }
         if(!b){
@@ -113,18 +125,6 @@ public class UserController {
         return Response.responseSuccess("修改成功！",null);
     }
 
-
-    @GetMapping(value="/login",produces = "application/json;charset=utf-8")
-    public User findUser(@RequestParam(value="username") String username,@RequestParam(value="password") String password){
-        log.info("#### 用户登录，入参：username={}",username);
-        if(userService.findUserByUsername(username,password)!=null) {
-            return userService.findUserByUsername(username,password);
-        }
-        else {
-            User user=new User();
-            return user;
-        }
-    }
 
     @PostMapping(value = "info/{id}/editphoto",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     Response changeUserAvatar(@PathVariable("id") String id, MultipartFile file){

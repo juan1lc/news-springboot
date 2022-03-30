@@ -1,5 +1,6 @@
 package com.news.newsspringboot.service.impl;
 
+import com.news.newsspringboot.enums.Gender;
 import com.news.newsspringboot.model.entity.User;
 import com.news.newsspringboot.exception.BizException;
 import com.news.newsspringboot.exception.ExceptionType;
@@ -86,6 +87,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int editAdress(String userId, String columnValue) {
+        User preuser = repository.getById(userId);
+        preuser.setAddress(columnValue);
+        repository.save(preuser);
+        return 0;
+    }
+
+    @Override
     public int editPhone(String userId, String columnValue) {
 
         User preuser = repository.getById(userId);
@@ -107,6 +116,22 @@ public class UserServiceImpl implements UserService {
     public int editUserIntro(String userId, String columnValue) {
         User preuser = repository.getById(userId);
         preuser.setIntroduction(columnValue);
+        repository.save(preuser);
+        return 0;
+    }
+
+    @Override
+    public int editUserGender(String userId, String columnValue) {
+        User preuser = repository.getById(userId);
+        preuser.setGender(Gender.valueOf(columnValue));
+        repository.save(preuser);
+        return 0;
+    }
+
+    @Override
+    public int editBirth(String userId, String columnValue) {
+        User preuser = repository.getById(userId);
+        preuser.setBirth(columnValue);
         repository.save(preuser);
         return 0;
     }

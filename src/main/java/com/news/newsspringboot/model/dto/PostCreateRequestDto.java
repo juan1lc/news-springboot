@@ -35,8 +35,7 @@ public class PostCreateRequestDto {
     private Integer commentCount=0;
 
     //动态状态（0：发布，1：草稿）
-    @NotBlank
-    private Integer postStatus;
+    private Integer postStatus=0;
 
     //之后连接服务器获取ip，现在先默认广东广州
     private String location = "广东广州";

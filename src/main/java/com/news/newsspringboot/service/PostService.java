@@ -28,6 +28,8 @@ public interface PostService{
     //获取某用户全部动态
     Page<Post> getPosts(String userId, Pageable pageable);
 
+    List<Post> getUserPosts(String userId);
+
     //修改草稿
     Post updatePost(String postId, PostUpdateRequestDto postUpdateRequestDto);
 

@@ -30,7 +30,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 //        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 //        chain.doFilter(request, response);
 //    }
-
+//
 //    private UsernamePasswordAuthenticationToken getAuthentication(String header) {
 //        if (header != null) {
 //            String username = JWT.require(Algorithm.HMAC512(SecurityConfig.SECRET.getBytes()))

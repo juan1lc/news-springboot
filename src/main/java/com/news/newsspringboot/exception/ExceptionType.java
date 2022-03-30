@@ -11,6 +11,7 @@ public enum ExceptionType {
     USER_PASSWORD_NOT_MATCH(40001003, "用户名或密码错误"),
     POST_NOT_A_DRAFT(40002001, "动态不在草稿箱中"),
     POST_IS_A_DRAFT(40002002, "动态在草稿箱中"),
+    TAG_DUPLICATE (40003001, "标签重复"),
     ARTICLE_NOT_FOUND(40402001, "文章不存在"),
     POST_NOT_FOUND(40402002, "动态不存在"),
     FILE_NOT_FOUND(40403001, "文件不存在"),

@@ -78,7 +78,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> getPosts(String userId, Pageable pageable) {
-        return repository.findByUseridAndPoststatus(userId, 2, pageable);
+        return repository.findByUseridAndPoststatus(userId, 0, pageable);
+    }
+
+    @Override
+    public List<Post> getUserPosts(String userId) {
+        return repository.findAllByUseridAndPoststatus(userId, 0);
     }
 
     @Override
