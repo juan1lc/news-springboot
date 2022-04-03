@@ -4,15 +4,17 @@ import com.news.newsspringboot.exception.BizException;
 import com.news.newsspringboot.exception.ExceptionType;
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
+import com.news.newsspringboot.model.entity.PostLike;
 import com.news.newsspringboot.model.entity.Post;
-import com.news.newsspringboot.model.entity.User;
 import com.news.newsspringboot.model.entity.comment.PostComment;
 import com.news.newsspringboot.model.mapper.PostMapper;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
+import com.news.newsspringboot.model.vo.PostVo;
 import com.news.newsspringboot.repository.PostCommentRepository;
+import com.news.newsspringboot.repository.PostLikeRepository;
 import com.news.newsspringboot.repository.PostRepository;
+import com.news.newsspringboot.service.PostLikeService;
 import com.news.newsspringboot.service.PostService;
-import com.news.newsspringboot.service.UserService;
 import com.news.newsspringboot.utils.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +37,10 @@ public class PostServiceImpl implements PostService {
     PostMapper postMapper;
 
     PostCommentRepository postCommentRepository;
+
+    PostLikeRepository postLikeRepository;
+
+    PostLikeService likePostService;
 
     @Override
     public Post createPost(PostCreateRequestDto postCreateRequestDto, MultipartFile[] files) {
@@ -55,13 +62,16 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public Post publishDraft(Post post) {
-        log.info("#### 动态服务层，发送草稿箱的动态：post={}",post);
-        //检查动态是否是草稿
-        checkPostStatics(post.getPoststatus());
+    public Post publishDraft(String postId) {
+        Post post = getById(postId);
         post.setUpdateTime(new Date());
         post.setPoststatus(0);
         return repository.save(post);
+    }
+
+    @Override
+    public Post getPostById(String postId) {
+        return getById(postId);
     }
 
     @Override
@@ -87,6 +97,28 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getUserDrafts(String userId) {
+        return repository.findAllByUseridAndPoststatus(userId, 1);
+    }
+
+    @Override
+    public List<PostVo> getPostByTags(String tags) {
+        List<Post> list = new ArrayList<Post>();
+        List<PostVo> listVo = new ArrayList<PostVo>();
+        list = repository.findAllByTagsAndPoststatus(tags, 0);
+        for (Post post : list) {
+            listVo.add(postMapper.toVo(post));
+        }
+        return listVo;
+    }
+
+    @Override
+    public List<PostLike> getAllLikers(String postid) {
+        return postLikeRepository.findAllByPostid(postid);
+    }
+
+
+    @Override
     public Post updatePost(String postId, PostUpdateRequestDto postUpdateRequestDto) {
         Post post = getById(postId);
         return postMapper.updateEntity(post, postUpdateRequestDto);
@@ -101,6 +133,29 @@ public class PostServiceImpl implements PostService {
     public PostDetailsVo getPostDetails(String postId) {
         Post post = repository.getById(postId);
         return postMapper.toDetailsVo(post);
+    }
+
+    @Override
+    public Integer LikeDislikePost(String postId, String userId) {
+        Post post = getById(postId);
+        Integer likeNum = post.getPostLike();
+        boolean isLiked = CheckLikeTable(postId, userId);
+        if(isLiked){//取消喜欢
+            PostLike likePost = postLikeRepository.getLikePostByUseridAndPostid(userId, postId);
+            postLikeRepository.delete(likePost);
+            likeNum--;
+        }else{
+            likePostService.likePost(userId, postId);
+            likeNum++;
+        }
+        post.setPostLike(likeNum);
+        repository.save(post);
+        return likeNum;
+    }
+
+    public boolean CheckLikeTable(String postId, String userId) {
+        Optional<PostLike> likePost = postLikeRepository.findByPostidAndUserid(postId, userId);
+        return likePost.isPresent();
     }
 
     private void checkPostStatics(Integer postStatus){
@@ -127,5 +182,15 @@ public class PostServiceImpl implements PostService {
     @Autowired
     public void setPostCommentRepository(PostCommentRepository postCommentRepository) {
         this.postCommentRepository = postCommentRepository;
+    }
+
+    @Autowired
+    public void setPostLikeRepository(PostLikeRepository postLikeRepository) {
+        this.postLikeRepository = postLikeRepository;
+    }
+
+    @Autowired
+    public void setLikePostService(PostLikeService likePostService) {
+        this.likePostService = likePostService;
     }
 }

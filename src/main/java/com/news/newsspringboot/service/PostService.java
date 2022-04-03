@@ -3,8 +3,10 @@ package com.news.newsspringboot.service;
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
 import com.news.newsspringboot.model.entity.Post;
+import com.news.newsspringboot.model.entity.PostLike;
 import com.news.newsspringboot.model.entity.comment.PostComment;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
+import com.news.newsspringboot.model.vo.PostVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +19,9 @@ public interface PostService{
     Post createPost(PostCreateRequestDto postCreateRequestDto, MultipartFile[] files);
 
     //发布草稿箱中的动态
-    Post publishDraft(Post post);
+    Post publishDraft(String postId);
+
+    Post getPostById(String postId);
 
     //删除动态
     void delete(String postId);
@@ -30,6 +34,12 @@ public interface PostService{
 
     List<Post> getUserPosts(String userId);
 
+    List<Post> getUserDrafts(String userId);
+
+    List<PostVo> getPostByTags(String tags);
+
+    List<PostLike> getAllLikers(String postid);
+
     //修改草稿
     Post updatePost(String postId, PostUpdateRequestDto postUpdateRequestDto);
 
@@ -38,4 +48,8 @@ public interface PostService{
 
     //获取动态详情页
     PostDetailsVo getPostDetails(String postId);
+
+    Integer LikeDislikePost(String postId, String userId);
+
+    boolean CheckLikeTable(String postId, String userId);
 }

@@ -43,7 +43,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private String photo="/images/photos/defaulthead.jpg";
+    private String photo="assets/images/defaultAvatar.png";
 
     private String introduction="此用户很懒..暂时没有介绍";
 

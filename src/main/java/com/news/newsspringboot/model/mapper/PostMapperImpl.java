@@ -64,14 +64,7 @@ public class PostMapperImpl implements PostMapper{
         PostVo postVo = new PostVo();
         postVo.setAuthor(user.getUsername());
         postVo.setAuthorPhoto(user.getPhoto());
-        postVo.setContent( post.getContent() );
-        postVo.setPostImgs( post.getPostImgs() );
-        postVo.setPostLike( post.getPostLike() );
-        postVo.setPostBrowse( post.getPostBrowse() );
-        postVo.setCommentCount( post.getCommentCount() );
-        if ( post.getCreateTime() != null ) {
-            postVo.setCreateTime( LocalDateTime.ofInstant( post.getCreateTime().toInstant(), ZoneId.of( "UTC" ) ) );
-        }
+        postVo.setPost(post);
 
         return postVo;
     }

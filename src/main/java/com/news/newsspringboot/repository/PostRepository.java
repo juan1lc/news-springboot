@@ -16,7 +16,9 @@ public interface PostRepository extends JpaRepository<Post, String> {
     @Query(value="select * from Post p where p.userid=?1 and  p.poststatus=?2", nativeQuery=true)
     Page<Post> findByUseridAndPoststatus(String userId, Integer poststatus, Pageable pageable);
 
-    @Query(value="select * from Post p where p.userid=?1 and  p.poststatus=?2", nativeQuery=true)
+    @Query(value="select * from Post p where p.userid=?1 and  p.poststatus=?2 order by p.update_time desc", nativeQuery=true)
     List<Post> findAllByUseridAndPoststatus(String userId, Integer poststatus);
 
+    @Query(value="select * from Post p where p.tags=?1 and  p.poststatus=?2 order by p.update_time desc", nativeQuery=true)
+    List<Post> findAllByTagsAndPoststatus(String tags, Integer poststatus);
 }

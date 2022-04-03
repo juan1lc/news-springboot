@@ -1,6 +1,7 @@
 package com.news.newsspringboot.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.news.newsspringboot.model.entity.Post;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,26 +15,7 @@ public class PostVo {
     private String authorPhoto;
 
     private String author;
-
-    private String content;
-
-    private String postImgs;
-
-    private String postTags;
-
-    private Integer postLike;
-
-    private String postLikeUsers;
-
-    private Integer postBrowse;
-
-    private Integer commentCount;
-
-    private String location;
-
-    @JsonFormat
-    private LocalDateTime createTime;
     
-    
+    private Post post;
     
 }
