@@ -112,7 +112,7 @@ public class PostController {
         return postService.CheckLikeTable(postid, userid);
     }
 
-    @GetMapping("/all-likers/{postid}")
+    @GetMapping(value = "/all-likers/{postid}", produces = "application/json;charset=utf-8")
     List<PostLike> getLikers(@PathVariable(value = "postid") String postid){
         return postService.getAllLikers(postid);
     }

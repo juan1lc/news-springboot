@@ -12,7 +12,7 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article, String> {
     Page<Article> findByTitleLike(String title, Pageable pageable);
 
-    @Query(value="select * from Article a order by a.publish_time desc", nativeQuery=true)
+    @Query(value="select * from Article a where a.type_id=?1 order by a.publish_time desc", nativeQuery=true)
     List<Article> findAllByTypeId(String typeid);
 
     Article getById(String id);

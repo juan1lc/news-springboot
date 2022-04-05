@@ -4,13 +4,12 @@ import com.news.newsspringboot.model.entity.PostLike;
 import com.news.newsspringboot.model.entity.User;
 import com.news.newsspringboot.repository.PostLikeRepository;
 import com.news.newsspringboot.service.PostLikeService;
-import com.news.newsspringboot.service.PostService;
 import com.news.newsspringboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PostLikeSeerviceImpl implements PostLikeService {
+public class PostLikeServiceImpl implements PostLikeService {
     PostLikeRepository postLikeRepository;
     UserService userService;
 
