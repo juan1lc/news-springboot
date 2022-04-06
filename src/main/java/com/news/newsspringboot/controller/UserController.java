@@ -1,8 +1,9 @@
 package com.news.newsspringboot.controller;
 
-import com.news.newsspringboot.enums.Gender;
 import com.news.newsspringboot.model.entity.User;
-import com.news.newsspringboot.model.vo.Response;
+import com.news.newsspringboot.model.vo.*;
+import com.news.newsspringboot.service.ArticleService;
+import com.news.newsspringboot.service.PostService;
 import com.news.newsspringboot.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -29,6 +30,8 @@ import java.util.Objects;
 public class UserController {
 
     UserService userService;
+    ArticleService articleService;
+    PostService postService;
 
     @GetMapping
     @ApiOperation("用户检索")
@@ -42,7 +45,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json;charset=utf-8")
     User get(@PathVariable String id) {
         return userService.getUserById(id);
     }
@@ -55,7 +58,7 @@ public class UserController {
     }
 
 
-    @GetMapping("info/{id}")
+    @GetMapping(value = "info/{id}", produces = "application/json;charset=utf-8")
     Response getUserInfoById(@PathVariable("id") String id){
         log.info("#### 获取指定用户的信息，入参：userId={}",id);
         User user = userService.getUserById(id);
@@ -126,7 +129,7 @@ public class UserController {
     }
 
 
-    @PostMapping(value = "info/{id}/editphoto",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/info/{id}/editphoto",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     Response changeUserAvatar(@PathVariable("id") String id, MultipartFile file){
         log.info("#### 用户头像修改，入参：userId={}，file={}",id,file);
         final String photo = userService.changePhoto(id, file);
@@ -138,11 +141,37 @@ public class UserController {
         return Response.responseSuccess("头像上传成功！",photo);
     }
 
+    @GetMapping(value = "/like-article-list/{id}", produces = "application/json;charset=utf-8")
+    List<ArticleLikePreview> getLikedArticle(@PathVariable("id") String id){
+        return articleService.getUserLike(id);
+    }
+
+    @GetMapping(value = "/star-article-list/{id}", produces = "application/json;charset=utf-8")
+    List<ArticleLikePreview> getStaredArticle(@PathVariable("id") String id){
+        return articleService.getUserStar(id);
+    }
+
+    @GetMapping(value = "/like-post-list/{id}", produces = "application/json;charset=utf-8")
+    List<PostLikePreview> getLikedPost(@PathVariable("id") String id){
+        return postService.getUserLike(id);
+    }
+
+    @GetMapping(value = "/star-post-list/{id}", produces = "application/json;charset=utf-8")
+    List<PostLikePreview> getStaredPost(@PathVariable("id") String id){
+        return postService.getUserStar(id);
+    }
+
     @Autowired
     public void setUserService(UserService userService){
         this.userService = userService;
     }
-
-
+    @Autowired
+    public void setArticleService(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+    @Autowired
+    public void setPostService(PostService postService) {
+        this.postService = postService;
+    }
 }
 

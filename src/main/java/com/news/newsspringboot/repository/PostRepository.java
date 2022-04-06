@@ -1,6 +1,6 @@
 package com.news.newsspringboot.repository;
 
-import com.news.newsspringboot.model.entity.Post;
+import com.news.newsspringboot.model.entity.post.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

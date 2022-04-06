@@ -3,7 +3,7 @@ package com.news.newsspringboot.service.impl;
 import com.news.newsspringboot.exception.BizException;
 import com.news.newsspringboot.exception.ExceptionType;
 import com.news.newsspringboot.model.dto.PostCommentCreateDto;
-import com.news.newsspringboot.model.entity.Post;
+import com.news.newsspringboot.model.entity.post.Post;
 import com.news.newsspringboot.model.entity.comment.PostComment;
 import com.news.newsspringboot.model.mapper.PostCommentMapper;
 import com.news.newsspringboot.repository.PostCommentRepository;

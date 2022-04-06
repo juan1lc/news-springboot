@@ -2,10 +2,11 @@ package com.news.newsspringboot.service;
 
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
-import com.news.newsspringboot.model.entity.Post;
-import com.news.newsspringboot.model.entity.PostLike;
+import com.news.newsspringboot.model.entity.post.Post;
+import com.news.newsspringboot.model.entity.post.PostLike;
 import com.news.newsspringboot.model.entity.comment.PostComment;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
+import com.news.newsspringboot.model.vo.PostLikePreview;
 import com.news.newsspringboot.model.vo.PostVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +51,10 @@ public interface PostService{
     PostDetailsVo getPostDetails(String postId);
 
     Integer LikeDislikePost(String postId, String userId);
+
+    List<PostLikePreview> getUserLike(String userId);
+
+    List<PostLikePreview> getUserStar(String userId);
 
     boolean CheckLikeTable(String postId, String userId);
 }

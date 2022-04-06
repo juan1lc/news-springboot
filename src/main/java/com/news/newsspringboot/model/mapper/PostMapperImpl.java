@@ -2,11 +2,11 @@ package com.news.newsspringboot.model.mapper;
 
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
-import com.news.newsspringboot.model.entity.Post;
+import com.news.newsspringboot.model.entity.post.Post;
 import com.news.newsspringboot.model.entity.User;
-import com.news.newsspringboot.model.entity.comment.PostComment;
 import com.news.newsspringboot.model.vo.PostCommentVo;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
+import com.news.newsspringboot.model.vo.PostLikePreview;
 import com.news.newsspringboot.model.vo.PostVo;
 import com.news.newsspringboot.repository.PostCommentRepository;
 import com.news.newsspringboot.service.UserService;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.AbstractList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +64,23 @@ public class PostMapperImpl implements PostMapper{
         postVo.setAuthor(user.getUsername());
         postVo.setAuthorPhoto(user.getPhoto());
         postVo.setPost(post);
+
+        return postVo;
+    }
+
+    public PostLikePreview toLikePreview(Post post, Date liketime){
+        if ( post == null ) {
+            return null;
+        }
+
+        String userId = post.getUserid();
+        User user = userService.getUserById(userId);
+
+        PostLikePreview postVo = new PostLikePreview();
+        postVo.setAuthor(user.getUsername());
+        postVo.setAuthorPhoto(user.getPhoto());
+        postVo.setPost(post);
+        postVo.setLiketime(liketime);
 
         return postVo;
     }

@@ -1,4 +1,4 @@
-package com.news.newsspringboot.model.entity;
+package com.news.newsspringboot.model.entity.article;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.news.newsspringboot.model.entity.comment.ArticleComment;

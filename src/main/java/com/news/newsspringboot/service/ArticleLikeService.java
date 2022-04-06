@@ -1,6 +1,6 @@
 package com.news.newsspringboot.service;
 
-import com.news.newsspringboot.model.entity.ArticleLike;
+import com.news.newsspringboot.model.entity.article.ArticleLike;
 
 import java.util.List;
 
@@ -11,4 +11,6 @@ public interface ArticleLikeService {
     List<ArticleLike> getAllLikers(String articleid);
 
     Integer LikeDislkeArticle(String articleid, String userid);
+
+
 }

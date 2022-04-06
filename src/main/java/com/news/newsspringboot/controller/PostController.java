@@ -1,20 +1,16 @@
 package com.news.newsspringboot.controller;
 
-import com.news.newsspringboot.model.dto.PostCommentCreateDto;
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
-import com.news.newsspringboot.model.entity.Post;
-import com.news.newsspringboot.model.entity.PostLike;
-import com.news.newsspringboot.model.entity.comment.PostComment;
+import com.news.newsspringboot.model.entity.post.Post;
+import com.news.newsspringboot.model.entity.post.PostLike;
 import com.news.newsspringboot.model.mapper.PostMapper;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
 import com.news.newsspringboot.model.vo.PostVo;
-import com.news.newsspringboot.model.vo.Response;
 import com.news.newsspringboot.service.CommentService;
 import com.news.newsspringboot.service.PostService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.buf.Utf8Decoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -116,6 +112,8 @@ public class PostController {
     List<PostLike> getLikers(@PathVariable(value = "postid") String postid){
         return postService.getAllLikers(postid);
     }
+
+
 
     @Autowired
     public void setPostService(PostService postService) {

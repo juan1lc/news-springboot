@@ -1,6 +1,6 @@
 package com.news.newsspringboot.service.impl;
 
-import com.news.newsspringboot.model.entity.PostLike;
+import com.news.newsspringboot.model.entity.post.PostLike;
 import com.news.newsspringboot.model.entity.User;
 import com.news.newsspringboot.repository.PostLikeRepository;
 import com.news.newsspringboot.service.PostLikeService;

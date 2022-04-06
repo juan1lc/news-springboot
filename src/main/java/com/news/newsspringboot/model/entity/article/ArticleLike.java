@@ -1,6 +1,5 @@
-package com.news.newsspringboot.model.entity;
+package com.news.newsspringboot.model.entity.article;
 
-import cn.hutool.core.date.DateTime;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -12,14 +11,14 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "post_like")
-public class PostLike {
+@Table(name = "article_like")
+public class ArticleLike {
     @Id
     @GeneratedValue(generator = "ksuid")
     @GenericGenerator(name = "ksuid", strategy = "com.news.newsspringboot.utils.KsuidIdentifierGenerator")
     private String id;
 
-    private String postid;
+    private String articleid;
 
     private String userid;
 

@@ -1,7 +1,7 @@
 package com.news.newsspringboot.service.impl;
 
-import com.news.newsspringboot.model.entity.Article;
-import com.news.newsspringboot.model.entity.ArticleLike;
+import com.news.newsspringboot.model.entity.article.Article;
+import com.news.newsspringboot.model.entity.article.ArticleLike;
 import com.news.newsspringboot.model.entity.User;
 import com.news.newsspringboot.repository.ArticleLikeRepository;
 import com.news.newsspringboot.repository.ArticleRepository;

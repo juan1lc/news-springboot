@@ -1,6 +1,7 @@
 package com.news.newsspringboot.service;
 
-import com.news.newsspringboot.model.entity.Article;
+import com.news.newsspringboot.model.entity.article.Article;
+import com.news.newsspringboot.model.vo.ArticleLikePreview;
 import com.news.newsspringboot.model.vo.ArticlePreview;
 import com.news.newsspringboot.model.vo.ArticleVo;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,10 @@ public interface ArticleService {
     Page<Article> search(String titleLike,  Pageable pageable);
 
     List<ArticlePreview> getAllByType(String typeId);
+
+    List<ArticleLikePreview> getUserLike(String userId);
+
+    List<ArticleLikePreview> getUserStar(String userId);
 
     ArticleVo getArticle(String articleId);
 }

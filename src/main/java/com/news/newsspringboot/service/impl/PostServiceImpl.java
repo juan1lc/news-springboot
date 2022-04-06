@@ -4,15 +4,18 @@ import com.news.newsspringboot.exception.BizException;
 import com.news.newsspringboot.exception.ExceptionType;
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
-import com.news.newsspringboot.model.entity.PostLike;
-import com.news.newsspringboot.model.entity.Post;
+import com.news.newsspringboot.model.entity.post.PostLike;
+import com.news.newsspringboot.model.entity.post.Post;
 import com.news.newsspringboot.model.entity.comment.PostComment;
+import com.news.newsspringboot.model.entity.post.PostStar;
 import com.news.newsspringboot.model.mapper.PostMapper;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
+import com.news.newsspringboot.model.vo.PostLikePreview;
 import com.news.newsspringboot.model.vo.PostVo;
 import com.news.newsspringboot.repository.PostCommentRepository;
 import com.news.newsspringboot.repository.PostLikeRepository;
 import com.news.newsspringboot.repository.PostRepository;
+import com.news.newsspringboot.repository.PostStarRepository;
 import com.news.newsspringboot.service.PostLikeService;
 import com.news.newsspringboot.service.PostService;
 import com.news.newsspringboot.utils.FileUploadUtil;
@@ -41,6 +44,8 @@ public class PostServiceImpl implements PostService {
     PostLikeRepository postLikeRepository;
 
     PostLikeService likePostService;
+
+    PostStarRepository postStarRepository;
 
     @Override
     public Post createPost(PostCreateRequestDto postCreateRequestDto, MultipartFile[] files) {
@@ -153,6 +158,28 @@ public class PostServiceImpl implements PostService {
         return likeNum;
     }
 
+    @Override
+    public List<PostLikePreview> getUserLike(String userId) {
+        List<PostLike> postLikes = postLikeRepository.findAllByUserid(userId);
+        List<PostLikePreview> res = new ArrayList<>();
+        for(PostLike pl:postLikes) {
+            Post post = repository.getById(pl.getPostid());
+            res.add(postMapper.toLikePreview(post, pl.getLiketime()));
+        }
+        return res;
+    }
+
+    @Override
+    public List<PostLikePreview> getUserStar(String userId) {
+        List<PostStar> postStars = postStarRepository.findAllByUseridOrderByLiketimeDesc(userId);
+        List<PostLikePreview> res = new ArrayList<>();
+        for(PostStar pl:postStars){
+            Post post = repository.getById(pl.getPostid());
+            res.add(postMapper.toLikePreview(post, pl.getLiketime()));
+        }
+        return res;
+    }
+
     public boolean CheckLikeTable(String postId, String userId) {
         Optional<PostLike> likePost = postLikeRepository.findByPostidAndUserid(postId, userId);
         return likePost.isPresent();
@@ -192,5 +219,10 @@ public class PostServiceImpl implements PostService {
     @Autowired
     public void setLikePostService(PostLikeService likePostService) {
         this.likePostService = likePostService;
+    }
+
+    @Autowired
+    public void setPostStarRepository(PostStarRepository postStarRepository) {
+        this.postStarRepository = postStarRepository;
     }
 }

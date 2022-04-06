@@ -1,14 +1,15 @@
 package com.news.newsspringboot.model.mapper;
 
-import com.news.newsspringboot.model.entity.Article;
+import com.news.newsspringboot.model.entity.article.Article;
 import com.news.newsspringboot.model.entity.User;
+import com.news.newsspringboot.model.vo.ArticleLikePreview;
 import com.news.newsspringboot.model.vo.ArticlePreview;
 import com.news.newsspringboot.model.vo.ArticleVo;
 import com.news.newsspringboot.repository.UserRepository;
-import com.news.newsspringboot.service.UserService;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class ArticleMapperImpl implements ArticleMapper{
@@ -54,6 +55,28 @@ public class ArticleMapperImpl implements ArticleMapper{
 
         return articlePreview;
 
+    }
+
+    public ArticleLikePreview toLikePreview(Article article, Date liketime){
+        if(article==null){
+            return null;
+        }
+
+        String userId = article.getUserId();
+        User user = userRepository.getById(userId);
+
+        ArticleLikePreview articlePreview = new ArticleLikePreview();
+        articlePreview.setId(article.getId());
+        articlePreview.setAuthorId(user.getId());
+        articlePreview.setAuthor(user.getUsername());
+        articlePreview.setAuthorPhoto(user.getPhoto());
+        articlePreview.setIntroduction(article.getIntroduction());
+        articlePreview.setSource(article.getSource());
+        articlePreview.setPublishTime(article.getPublishTime());
+        articlePreview.setTitle(article.getTitle());
+        articlePreview.setLiketime(liketime);
+
+        return articlePreview;
     }
 
     @Autowired

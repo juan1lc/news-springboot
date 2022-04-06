@@ -1,6 +1,6 @@
 package com.news.newsspringboot.controller;
 
-import com.news.newsspringboot.model.entity.ArticleLike;
+import com.news.newsspringboot.model.entity.article.ArticleLike;
 import com.news.newsspringboot.service.ArticleLikeService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/like-articles")
-@Api(tags="文章")
 public class ArticleLikeController {
 
     ArticleLikeService articleLikeService;

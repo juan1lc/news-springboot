@@ -1,6 +1,7 @@
-package com.news.newsspringboot.model.entity;
+package com.news.newsspringboot.model.entity.post;
 
 import cn.hutool.core.date.DateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
 public class Post {
     @Id
     @GeneratedValue(generator = "ksuid")
