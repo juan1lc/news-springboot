@@ -7,6 +7,8 @@ import java.util.Date;
 @Data
 public class PostCommentVo {
 
+    private String id;
+
     private Date createtime;
 
     private String content;
@@ -20,4 +22,6 @@ public class PostCommentVo {
     private String author;
 
     private String authorPhoto;
+
+    private Integer commentcount;
 }

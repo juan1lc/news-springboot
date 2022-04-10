@@ -15,9 +15,13 @@ public class PostCommentCreateDto {
 
     private String userid;
 
+    private String postid;
+
     private String commentparent;
 
     private Integer commentlike=0;
 
     private String commentlikeuser;
+
+    private Integer commentcount=0;
 }

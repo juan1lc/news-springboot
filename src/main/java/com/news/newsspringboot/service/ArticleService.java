@@ -1,6 +1,7 @@
 package com.news.newsspringboot.service;
 
 import com.news.newsspringboot.model.entity.article.Article;
+import com.news.newsspringboot.model.vo.ArticleCommentVo;
 import com.news.newsspringboot.model.vo.ArticleLikePreview;
 import com.news.newsspringboot.model.vo.ArticlePreview;
 import com.news.newsspringboot.model.vo.ArticleVo;
@@ -26,5 +27,9 @@ public interface ArticleService {
 
     List<ArticleLikePreview> getUserStar(String userId);
 
+    List<ArticleCommentVo> getAllComments(String articleId);
+
     ArticleVo getArticle(String articleId);
+
+    List<ArticleVo> getReconmendArticles(String userId);
 }

@@ -8,6 +8,7 @@ CREATE TABLE post_comment
     commentparent int(11) DEFAULT NULL COMMENT '评论的父ID关联本表中comment_id（评论的对象，为NULL指对动态的评论）',
     commentlike int(11) DEFAULT NULL COMMENT '评论点赞数量',
     commentlikeuser varchar(255) DEFAULT NULL COMMENT '评论点赞用户名（多个用户之间使用“，”分割）',
+    commentcount int(11) DEFAULT NULL COMMENT '评论评论数量',
     createtime timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '评论时间',
     CONSTRAINT  c_user_comment_post_id
         FOREIGN KEY (userid) REFERENCES user (id),

@@ -138,6 +138,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String changePhoto(String userId, MultipartFile file) {
+
         String fileName = singleFileUpload(file);
         User preUser=getUserById(userId);
         preUser.setPhoto(fileName);

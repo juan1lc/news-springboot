@@ -1,20 +1,24 @@
-package com.news.newsspringboot.model.entity.comment;
+package com.news.newsspringboot.model.entity.post;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
-@MappedSuperclass
+@Entity
 @Data
-public class CommentBaseEntity {
+@Table(name = "post_second_comment")
+public class PostSecondComment {
     @Id
     @GeneratedValue(generator = "ksuid")
     @GenericGenerator(name = "ksuid", strategy = "com.news.newsspringboot.utils.KsuidIdentifierGenerator")
     private String id;
 
-    private Date createtime;
+    private Date createtime=new Date();
 
     private String content;
 
@@ -22,8 +26,7 @@ public class CommentBaseEntity {
 
     private String commentparent;
 
-    private Integer commentlike;
+    private String commentid;
 
-    private String commentlikeuser;
-
+    private Integer commentlike=0;
 }

@@ -15,5 +15,8 @@ public interface ArticleRepository extends JpaRepository<Article, String> {
     @Query(value="select * from Article a where a.type_id=?1 order by a.publish_time desc", nativeQuery=true)
     List<Article> findAllByTypeId(String typeid);
 
+    @Query(value="select * from Article a order by a.article_like desc  limit 0, 10", nativeQuery=true)
+    List<Article> findAllOrderByArticleLike();
+
     Article getById(String id);
 }

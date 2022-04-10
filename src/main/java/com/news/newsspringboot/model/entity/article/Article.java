@@ -1,13 +1,11 @@
 package com.news.newsspringboot.model.entity.article;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.news.newsspringboot.model.entity.comment.ArticleComment;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Data
@@ -49,5 +47,7 @@ public class Article {
     private String introduction;
 
     private String content;
+
+    private double w; //相似度
 
 }

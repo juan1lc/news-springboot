@@ -1,14 +1,16 @@
-package com.news.newsspringboot.model.mapper;
+package com.news.newsspringboot.model.mapper.impl;
 
 import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
 import com.news.newsspringboot.model.entity.post.Post;
 import com.news.newsspringboot.model.entity.User;
-import com.news.newsspringboot.model.vo.PostCommentVo;
-import com.news.newsspringboot.model.vo.PostDetailsVo;
-import com.news.newsspringboot.model.vo.PostLikePreview;
-import com.news.newsspringboot.model.vo.PostVo;
+import com.news.newsspringboot.model.entity.post.PostHistory;
+import com.news.newsspringboot.model.mapper.PostCommentMapper;
+import com.news.newsspringboot.model.mapper.PostMapper;
+import com.news.newsspringboot.model.vo.*;
 import com.news.newsspringboot.repository.PostCommentRepository;
+import com.news.newsspringboot.repository.PostRepository;
+import com.news.newsspringboot.repository.UserRepository;
 import com.news.newsspringboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,12 +21,16 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class PostMapperImpl implements PostMapper{
+public class PostMapperImpl implements PostMapper {
     UserService userService;
+
+    UserRepository userRepository;
 
     PostCommentRepository postCommentRepository;
 
     PostCommentMapper postCommentMapper;
+
+    PostRepository postRepository;
 
     @Override
     public Post createEntity(PostCreateRequestDto postCreateRequestDto) {
@@ -86,6 +92,26 @@ public class PostMapperImpl implements PostMapper{
     }
 
     @Override
+    public PostHistoryVo toHistoryVo(PostHistory postHistory) {
+        if ( postHistory == null ) {
+            return null;
+        }
+        String userId = postHistory.getUserid();
+        String postId = postHistory.getPostid();
+
+        User user = userRepository.getById(userId);
+        Post post = postRepository.getById(postId);
+
+        PostHistoryVo postHistoryVo = new PostHistoryVo();
+        postHistoryVo.setPost(post);
+        postHistoryVo.setTime(postHistory.getTime());
+        postHistoryVo.setAuthor(user.getUsername());
+        postHistoryVo.setAuthorPhoto(user.getPhoto());
+
+        return postHistoryVo;
+    }
+
+    @Override
     public Post updateEntity(Post post, PostUpdateRequestDto postUpdateRequestDto) {
         if ( postUpdateRequestDto == null ) {
             return null;
@@ -117,8 +143,6 @@ public class PostMapperImpl implements PostMapper{
 
         String userId = post.getUserid();
         User user = userService.getUserById(userId);
-        String postId = post.getId();
-        List<PostCommentVo> postCommentList = postCommentRepository.findByPostid(postId).stream().map(postCommentMapper::toVo).toList();
 
 
         PostDetailsVo postDetailsVo = new PostDetailsVo();
@@ -134,7 +158,6 @@ public class PostMapperImpl implements PostMapper{
         if ( post.getCreateTime() != null ) {
             postDetailsVo.setCreateTime( LocalDateTime.ofInstant( post.getCreateTime().toInstant(), ZoneId.of( "UTC" ) ) );
         }
-        postDetailsVo.setPostCommentList(postCommentList);
 
         return postDetailsVo;
     }
@@ -145,6 +168,11 @@ public class PostMapperImpl implements PostMapper{
     }
 
     @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
     public void setPostCommentRepository(PostCommentRepository postCommentRepository) {
         this.postCommentRepository = postCommentRepository;
     }
@@ -152,5 +180,10 @@ public class PostMapperImpl implements PostMapper{
     @Autowired
     public void setPostCommentMapper(PostCommentMapper postCommentMapper) {
         this.postCommentMapper = postCommentMapper;
+    }
+
+    @Autowired
+    public void setPostRepository(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 }

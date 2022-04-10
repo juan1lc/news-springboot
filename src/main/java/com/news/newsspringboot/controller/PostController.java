@@ -5,6 +5,7 @@ import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
 import com.news.newsspringboot.model.entity.post.Post;
 import com.news.newsspringboot.model.entity.post.PostLike;
 import com.news.newsspringboot.model.mapper.PostMapper;
+import com.news.newsspringboot.model.vo.PostCommentVo;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
 import com.news.newsspringboot.model.vo.PostVo;
 import com.news.newsspringboot.service.CommentService;
@@ -95,6 +96,23 @@ public class PostController {
         }
         return null;
     }
+    @GetMapping(value = "/tags/hot", produces = "application/json;charset=utf-8")
+    List<PostVo> getHotTagPosts(@RequestParam(value = "tag_name") String tag_name){
+        try {
+            String tags = URLDecoder.decode(tag_name, "UTF8");
+            print(tags);
+            print(tag_name);
+            return postService.getHotPostByTags(tags);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PutMapping("/browse/{post-id}")
+    Integer browsePost(@PathVariable(value = "post-id") String postId){
+        return postService.addBrowse(postId);
+    }
 
     @PostMapping("/like")
     Integer likePost(@RequestParam(value = "postid") String postid,
@@ -113,7 +131,15 @@ public class PostController {
         return postService.getAllLikers(postid);
     }
 
+    @GetMapping(value = "/all-comments/{postid}", produces = "application/json;charset=utf-8")
+    List<PostCommentVo> getComments(@PathVariable(value = "postid") String postid){
+        return postService.getAllComments(postid);
+    }
 
+    @GetMapping(value = "/posts-count/{userid}", produces = "application/json;charset=utf-8")
+    Integer getPostsCount(@PathVariable(value = "userid") String userid){
+        return postService.getPostCount(userid);
+    }
 
     @Autowired
     public void setPostService(PostService postService) {

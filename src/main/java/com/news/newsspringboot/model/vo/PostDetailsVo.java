@@ -1,7 +1,6 @@
 package com.news.newsspringboot.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.news.newsspringboot.model.entity.comment.PostComment;
 import lombok.Data;
 
 import java.time.LocalDateTime;

@@ -1,10 +1,14 @@
-package com.news.newsspringboot.model.mapper;
+package com.news.newsspringboot.model.mapper.impl;
 
 import com.news.newsspringboot.model.entity.article.Article;
 import com.news.newsspringboot.model.entity.User;
+import com.news.newsspringboot.model.entity.article.ArticleHistory;
+import com.news.newsspringboot.model.mapper.ArticleMapper;
+import com.news.newsspringboot.model.vo.ArticleHistoryVo;
 import com.news.newsspringboot.model.vo.ArticleLikePreview;
 import com.news.newsspringboot.model.vo.ArticlePreview;
 import com.news.newsspringboot.model.vo.ArticleVo;
+import com.news.newsspringboot.repository.ArticleRepository;
 import com.news.newsspringboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,8 +16,9 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class ArticleMapperImpl implements ArticleMapper{
+public class ArticleMapperImpl implements ArticleMapper {
     UserRepository userRepository;
+    ArticleRepository articleRepository;
 
     @Override
     public ArticleVo toVo(Article article) {
@@ -79,8 +84,28 @@ public class ArticleMapperImpl implements ArticleMapper{
         return articlePreview;
     }
 
+    @Override
+    public ArticleHistoryVo toHistoryVo(ArticleHistory articleHistory) {
+        if(articleHistory==null){
+            return null;
+        }
+        String articleid = articleHistory.getArticleid();
+        Article article = articleRepository.getById(articleid);
+        ArticlePreview articlePreview = toPreview(article);
+
+        ArticleHistoryVo articleHistoryVo = new ArticleHistoryVo();
+        articleHistoryVo.setArticlePreview(articlePreview);
+        articleHistoryVo.setTime(articleHistory.getTime());
+
+        return articleHistoryVo;
+    }
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+    @Autowired
+    public void setArticleRepository(ArticleRepository articleRepository) {
+        this.articleRepository = articleRepository;
     }
 }

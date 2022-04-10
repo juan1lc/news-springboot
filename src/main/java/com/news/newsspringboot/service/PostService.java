@@ -4,7 +4,7 @@ import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
 import com.news.newsspringboot.model.entity.post.Post;
 import com.news.newsspringboot.model.entity.post.PostLike;
-import com.news.newsspringboot.model.entity.comment.PostComment;
+import com.news.newsspringboot.model.vo.PostCommentVo;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
 import com.news.newsspringboot.model.vo.PostLikePreview;
 import com.news.newsspringboot.model.vo.PostVo;
@@ -39,13 +39,17 @@ public interface PostService{
 
     List<PostVo> getPostByTags(String tags);
 
+    List<PostVo> getHotPostByTags(String tags);
+
     List<PostLike> getAllLikers(String postid);
 
     //修改草稿
     Post updatePost(String postId, PostUpdateRequestDto postUpdateRequestDto);
 
+    Integer addBrowse(String postid);
+
     //获取某动态所有评论
-    List<PostComment> getAllComments(String postId);
+    List<PostCommentVo> getAllComments(String postId);
 
     //获取动态详情页
     PostDetailsVo getPostDetails(String postId);
@@ -57,4 +61,6 @@ public interface PostService{
     List<PostLikePreview> getUserStar(String userId);
 
     boolean CheckLikeTable(String postId, String userId);
+
+    Integer getPostCount(String userid);
 }

@@ -129,7 +129,7 @@ public class UserController {
     }
 
 
-    @PostMapping(value = "/info/{id}/editphoto",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/info/editphoto/{id}",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     Response changeUserAvatar(@PathVariable("id") String id, MultipartFile file){
         log.info("#### 用户头像修改，入参：userId={}，file={}",id,file);
         final String photo = userService.changePhoto(id, file);

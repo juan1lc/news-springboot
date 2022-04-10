@@ -6,9 +6,11 @@ import com.news.newsspringboot.model.dto.PostCreateRequestDto;
 import com.news.newsspringboot.model.dto.PostUpdateRequestDto;
 import com.news.newsspringboot.model.entity.post.PostLike;
 import com.news.newsspringboot.model.entity.post.Post;
-import com.news.newsspringboot.model.entity.comment.PostComment;
+import com.news.newsspringboot.model.entity.post.PostComment;
 import com.news.newsspringboot.model.entity.post.PostStar;
+import com.news.newsspringboot.model.mapper.PostCommentMapper;
 import com.news.newsspringboot.model.mapper.PostMapper;
+import com.news.newsspringboot.model.vo.PostCommentVo;
 import com.news.newsspringboot.model.vo.PostDetailsVo;
 import com.news.newsspringboot.model.vo.PostLikePreview;
 import com.news.newsspringboot.model.vo.PostVo;
@@ -26,10 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -39,6 +38,8 @@ public class PostServiceImpl implements PostService {
 
     PostMapper postMapper;
 
+    PostCommentMapper postCommentMapper;
+
     PostCommentRepository postCommentRepository;
 
     PostLikeRepository postLikeRepository;
@@ -46,6 +47,7 @@ public class PostServiceImpl implements PostService {
     PostLikeService likePostService;
 
     PostStarRepository postStarRepository;
+
 
     @Override
     public Post createPost(PostCreateRequestDto postCreateRequestDto, MultipartFile[] files) {
@@ -118,6 +120,35 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostVo> getHotPostByTags(String tags) {
+        List<Post> list;
+        List<Post> list2 = new ArrayList<>();
+        List<PostVo> listVo = new ArrayList<PostVo>();
+        list = repository.findAllByTagsAndPoststatus(tags, 0);
+
+        if(list.size()>20){
+            for(int i=0; i<20; i++){
+                list2.add(list.get(i));
+            }
+        }else{
+            list2 = list;
+        }
+        list2.sort((o1, o2) -> {
+            if(o1.getId()==null || o2.getId()==null){
+                return 0;
+            }else if(o1.getPostLike()+o1.getCommentCount()==o2.getPostLike()+o2.getCommentCount()){
+                return o2.getPostBrowse().compareTo(o1.getPostBrowse());
+            }else{
+                return o2.getPostLike()-o1.getPostLike();
+            }
+        });
+        for (Post post : list2) {
+            listVo.add(postMapper.toVo(post));
+        }
+        return listVo;
+    }
+
+    @Override
     public List<PostLike> getAllLikers(String postid) {
         return postLikeRepository.findAllByPostid(postid);
     }
@@ -130,8 +161,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostComment> getAllComments(String postId) {
-        return postCommentRepository.findByPostid(postId);
+    public Integer addBrowse(String postid) {
+        Post post = repository.getById(postid);
+        Integer browse = post.getPostBrowse();
+        post.setPostBrowse(browse+1);
+        repository.save(post);
+        return browse+1;
+    }
+
+    @Override
+    public List<PostCommentVo> getAllComments(String postId) {
+        List<PostComment> postComments = postCommentRepository.findByPostidOrderByCommentlikeDesc(postId);
+        List<PostCommentVo> postCommentVos= new ArrayList<>();
+        for(PostComment postComment:postComments){
+            postCommentVos.add(postCommentMapper.toVo(postComment));
+        }
+        return postCommentVos;
     }
 
     @Override
@@ -185,6 +230,12 @@ public class PostServiceImpl implements PostService {
         return likePost.isPresent();
     }
 
+    @Override
+    public Integer getPostCount(String userid) {
+        List<Post> posts = repository.findAllByUseridAndPoststatus(userid, 0);
+        return posts.size();
+    }
+
     private void checkPostStatics(Integer postStatus){
         log.info("#### 动态服务层，检查动态状态：postStatus={}",postStatus);
         if(postStatus != 1){
@@ -204,6 +255,11 @@ public class PostServiceImpl implements PostService {
     @Autowired
     public void setPostMapper(PostMapper postMapper) {
         this.postMapper = postMapper;
+    }
+
+    @Autowired
+    public void setPostCommentMapper(PostCommentMapper postCommentMapper) {
+        this.postCommentMapper = postCommentMapper;
     }
 
     @Autowired

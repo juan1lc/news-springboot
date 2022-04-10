@@ -1,5 +1,6 @@
-package com.news.newsspringboot.model.entity.comment;
+package com.news.newsspringboot.model.entity.article;
 
+import com.news.newsspringboot.model.entity.CommentBaseEntity;
 import lombok.Data;
 
 import javax.persistence.Entity;

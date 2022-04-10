@@ -1,13 +1,18 @@
 package com.news.newsspringboot.service;
 
+import com.news.newsspringboot.model.dto.ArticleCommentCreateDto;
 import com.news.newsspringboot.model.dto.PostCommentCreateDto;
-import com.news.newsspringboot.model.entity.comment.PostComment;
+import com.news.newsspringboot.model.entity.article.ArticleComment;
+import com.news.newsspringboot.model.entity.post.PostComment;
 
 public interface CommentService {
 
     //对某动态发表评论
-    PostComment create(PostCommentCreateDto postCommentCreateDto, String postId);
+    PostComment createPostComment(PostCommentCreateDto postCommentCreateDto);
+
+    //对某文章发表评论
+    ArticleComment createArticleComment(ArticleCommentCreateDto articleCommentCreateDto);
 
     //删除评论
-    void delete(String postCommentId);
+    void deletePostComment(String postCommentId);
 }
